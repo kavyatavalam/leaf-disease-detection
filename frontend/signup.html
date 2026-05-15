@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Signup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #007bff, #00a85a);
+}
+
+.card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 15px;
+  width: 350px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h2 {
+  margin-bottom: 25px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: #007b55;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #e6e6e6;
+}
+
+a {
+  display: block;
+  margin-top: 15px;
+  color: white;
+  text-decoration: underline;
+}
+
+#msg {
+  margin-top: 10px;
+  color: yellow;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Create Account</h2>
+
+  <div class="input-group">
+    <input type="text" id="username" placeholder="Username">
+  </div>
+
+  <div class="input-group">
+    <input type="password" id="password" placeholder="Password">
+  </div>
+
+  <button onclick="signup()">Signup</button>
+
+  <a href="login.html">Already have an account?</a>
+
+  <p id="msg"></p>
+</div>
+
+<script>
+async function signup() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  if (!username || !password) {
+    document.getElementById("msg").innerText = "Please fill all fields";
+    return;
+  }
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.message) {
+      document.getElementById("msg").innerText = "Signup successful!";
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1200);
+    } else {
+      document.getElementById("msg").innerText = data.error;
+    }
+
+  } catch (error) {
+    console.log(error);  // 👈 IMPORTANT
+    document.getElementById("msg").innerText = "Cannot connect to backend!";
+  }
+}
+</script>
+
+</body>
+</html>

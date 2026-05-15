@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Predict Disease</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom right, #e7f6e7, #fdfdfd);
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  position: fixed;
+  top: 0; width: 100%;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  color: #007b55;
+}
+
+nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
+
+nav a {
+  text-decoration: none;
+  color: #007b55;
+  font-weight: 600;
+}
+
+/* USER + LOGOUT */
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-box span {
+  font-weight: 600;
+  color: #007b55;
+}
+
+.logout-btn {
+  padding: 6px 12px;
+  background: #007b55;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* MAIN */
+.container {
+  margin-top: 120px;
+  text-align: center;
+  padding: 40px;
+  flex: 1;
+}
+
+.container h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #007b55;
+}
+
+input {
+  margin-bottom: 15px;
+}
+
+/* IMAGE */
+.preview img {
+  width: auto;
+  max-width: 300px;
+  max-height: 300px;
+  display: none;
+  margin: 20px auto;
+  border: none;
+  box-shadow: none;
+}
+
+/* BUTTON */
+button {
+  padding: 12px 25px;
+  background: linear-gradient(135deg, #00a85a, #007bff);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* RESULT */
+.result {
+  margin-top: 20px;
+}
+
+#resultText {
+  font-size: 1.2rem;
+  color: #007b55;
+  font-weight: bold;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #007b55;
+  color: white;
+  margin-top: auto;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Leaf Disease Detection</h1>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="predict.html">Predict</a></li>
+      <li><a href="history.html">History</a></li>
+
+      <div class="user-box">
+        <span id="userDisplay"></span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </ul>
+  </nav>
+</header>
+
+<section class="container">
+  <h2>Upload Leaf Image</h2>
+
+  <input type="file" id="imageInput" accept="image/*">
+
+  <div class="preview">
+    <img id="previewImage" />
+  </div>
+
+  <button onclick="uploadImage()">Predict</button>
+
+  <div class="result">
+    <h3 id="resultText"></h3>
+    <p id="confidenceText"></p>
+  </div>
+</section>
+
+<footer>
+  © 2025 Leaf Disease Detection | AI Powered Prediction
+</footer>
+
+<script>
+const input = document.getElementById("imageInput");
+const preview = document.getElementById("previewImage");
+
+let user;
+
+// run ONLY when page loads
+window.onload = () => {
+    user = localStorage.getItem("user");
+
+    if (!user) {
+        alert("Please login first!");
+        window.location.href = "login.html";
+    } else {
+        document.getElementById("userDisplay").innerText = "Hi, " + user;
+    }
+};
+
+// IMAGE PREVIEW
+input.addEventListener("change", () => {
+    const file = input.files[0];
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+    }
+});
+
+// PREDICT FUNCTION
+async function uploadImage() {
+    const file = input.files[0];
+
+    if (!file) {
+        alert("Please select an image!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    document.getElementById("resultText").innerText = "Predicting...";
+    document.getElementById("confidenceText").innerText = "";
+
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/predict?username=${user}`, {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            document.getElementById("resultText").innerText = "Error: " + data.error;
+            return;
+        }
+
+        document.getElementById("resultText").innerText = "Disease: " + data.class;
+        document.getElementById("confidenceText").innerText =
+            "Confidence: " + (data.confidence * 100).toFixed(2) + "%";
+
+    } catch (error) {
+        document.getElementById("resultText").innerText = "Server not running!";
+    }
+}
+
+// LOGOUT
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>

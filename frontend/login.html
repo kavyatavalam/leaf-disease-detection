@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #00a85a, #007bff);
+}
+
+.card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 15px;
+  width: 350px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h2 {
+  margin-bottom: 25px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: #007b55;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #e6e6e6;
+}
+
+a {
+  display: block;
+  margin-top: 15px;
+  color: white;
+  text-decoration: underline;
+}
+
+#msg {
+  margin-top: 10px;
+  color: yellow;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Welcome Back</h2>
+
+  <div class="input-group">
+    <input type="text" id="username" placeholder="Username">
+  </div>
+
+  <div class="input-group">
+    <input type="password" id="password" placeholder="Password">
+  </div>
+
+  <button onclick="login()">Login</button>
+
+  <a href="signup.html">Create an account</a>
+
+  <p id="msg"></p>
+</div>
+
+<script>
+async function login() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.message) {
+      localStorage.setItem("user", username);
+      window.location.href = "predict.html";
+    } else {
+      document.getElementById("msg").innerText = data.error;
+    }
+
+  } catch (error) {
+    console.log(error);
+    document.getElementById("msg").innerText = "Cannot connect to backend!";
+  }
+}
+</script>
+
+</body>
+</html>

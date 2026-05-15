@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Leaf Disease Detection</title>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to top right, #e7f6e7, #fdfdfd);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header, nav, footer { 
+      text-align: center; 
+      background: #007b55; 
+      color: white; 
+      padding: 15px; 
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+    }
+
+    main {
+      max-width: 1100px;   /* 🔥 increased width */
+      margin: 40px auto;
+      padding: 20px;
+      flex: 1;
+    }
+
+    /* 🔥 Card Style */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      color: #007b55;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #444;
+      line-height: 1.6;
+    }
+
+    ul {
+      padding-left: 20px;
+      color: #444;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>About Our Project</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="predict.html">Predict</a> |
+    <a href="developers.html">Developers</a> |
+    <a href="login.html">Login</a>
+  </nav>
+
+  <main>
+
+    <!-- Box 1 -->
+    <div class="card">
+      <h2>AI for a Greener Tomorrow</h2>
+      <p>
+        The Leaf Disease Detection System is an AI-powered solution designed to help farmers and agricultural experts identify plant diseases quickly and accurately. It uses deep learning models trained on leaf images to detect diseases at early stages.
+      </p>
+    </div>
+
+    <!-- Box 2 -->
+    <div class="card">
+      <h2>🌿 How It Works</h2>
+      <p>
+        Users upload a leaf image, and the system processes it using a trained Convolutional Neural Network (CNN). The model analyzes patterns, textures, and color variations to identify diseases.
+      </p>
+      <ul>
+        <li>Upload a leaf image</li>
+        <li>AI analyzes the image</li>
+        <li>Prediction is generated instantly</li>
+        <li>Cause and precautions are provided</li>
+      </ul>
+    </div>
+
+    <!-- Box 3 -->
+    <div class="card">
+      <h2>🚀 Key Features</h2>
+      <ul>
+        <li>Accurate disease detection using deep learning</li>
+        <li>Instant results with confidence score</li>
+        <li>Provides causes and preventive measures</li>
+        <li>User-friendly interface</li>
+        <li>Supports multiple crops</li>
+      </ul>
+    </div>
+
+    <!-- Box 4 -->
+    <div class="card">
+      <h2>🌱 Impact</h2>
+      <p>
+        This system helps reduce crop loss and improves productivity by enabling early detection of plant diseases. It empowers farmers with smart tools for better decision-making and sustainable agriculture.
+      </p>
+    </div>
+
+  </main>
+
+  <footer>
+    © 2025 Leaf Disease Detection | Sustainable Tech for Agriculture
+  </footer>
+
+</body>
+</html>
